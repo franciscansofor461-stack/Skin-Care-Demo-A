@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mabel Cosmetics | Premium Imported Skincare</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,400&family=Satoshi:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nude-beige: #F9F6F2;
+            --soft-gold: #D4AF37;
+            --warm-white: #FFFFFF;
+            --soft-pink: #FCEEE9;
+            --luxe-black: #1A1A1A;
+            --glass: rgba(255, 255, 255, 0.4);
+            --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: var(--nude-beige); 
+            color: var(--luxe-black); 
+            font-family: 'Satoshi', sans-serif; 
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 { font-family: 'Cormorant Garamond', serif; font-weight: 500; }
+
+        /* Smooth Scroll Utility */
+        html { scroll-behavior: smooth; }
+
+        /* Glassmorphism Header */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            padding: 1.5rem 5%; display: flex; justify-content: space-between; align-items: center;
+            background: var(--glass); backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .logo { font-size: 1.8rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle { display: none; background: none; border: none; cursor: pointer; font-size: 1.5rem; }
+        
+        nav { display: flex; }
+        nav a { transition: var(--transition); }
+
+        /* Hero Section */
+        .hero {
+            height: auto; min-height: 100vh; position: relative; display: flex; align-items: center; justify-content: space-between;
+            padding: 120px 8% 4rem; overflow: hidden; background: radial-gradient(circle at 70% 50%, var(--soft-pink), transparent);
+            gap: 2rem;
+        }
+
+        .hero-content { max-width: 600px; z-index: 2; flex: 1; }
+        .hero h1 { font-size: clamp(2rem, 8vw, 5rem); line-height: 1.1; margin-bottom: 1.5rem; opacity: 0; transform: translateY(30px); }
+        .hero p { font-size: clamp(0.9rem, 2vw, 1.1rem); margin-bottom: 2rem; color: #555; opacity: 0; transform: translateY(30px); line-height: 1.6; }
+
+        .hero-visual {
+            position: relative; width: 40%; height: 500px; display: flex; justify-content: center; align-items: center; flex: 1; min-height: 350px;
+        }
+
+        .main-img { 
+            width: 100%; height: 100%; object-fit: cover; border-radius: 500px 500px 0 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        /* Floating Product Card */
+        .floating-card {
+            position: absolute; background: var(--glass); backdrop-filter: blur(10px);
+            padding: 1.5rem; border-radius: 15px; border: 1px solid white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); z-index: 3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Luxury Buttons */
+        .btn {
+            padding: 1rem 1.8rem; border: none; cursor: pointer; font-weight: 600;
+            letter-spacing: 1px; transition: var(--transition); position: relative;
+            text-transform: uppercase; font-size: clamp(0.7rem, 1.5vw, 0.8rem); display: inline-block; text-decoration: none;
+            border-radius: 2px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
+        }
+        .btn-gold { background: var(--luxe-black); color: white; overflow: hidden; }
+        .btn-gold:hover { background: var(--soft-gold); color: var(--luxe-black); transform: translateY(-3px); }
+        .btn-gold:active { transform: translateY(-1px); }
+
+        /* Best Sellers Section */
+        .section { padding: clamp(3rem, 8vw, 8rem) clamp(1.5rem, 5vw, 8%); }
+        .section-title { text-align: center; margin-bottom: clamp(2rem, 5vw, 4rem); }
+        .section-title h2 { font-size: clamp(2rem, 6vw, 3.5rem); margin-bottom: 1rem; line-height: 1.2; }
+        .section-title p { font-size: clamp(0.9rem, 2vw, 1rem); }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: clamp(1.5rem, 3vw, 3rem); }
+        .product-card {
+            background: white; padding: clamp(0.8rem, 2vw, 1rem); position: relative; transition: var(--transition);
+            overflow: hidden; border: 1px solid transparent; display: flex; flex-direction: column;
+        }
+        .product-card:hover { border-color: var(--soft-gold); box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1); }
+        .product-image { height: clamp(280px, 50vw, 400px); background: #f0f0f0; margin-bottom: 1.5rem; overflow: hidden; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
+        .product-card:hover .product-image img { transform: scale(1.1); }
+        .product-card h3 { font-size: clamp(1rem, 2vw, 1.3rem); margin-bottom: 0.5rem; line-height: 1.4; }
+
+        /* Trust Badges */
+        .badges { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 2rem; }
+        .badge-item { display: flex; align-items: center; gap: 0.5rem; font-size: clamp(0.7rem, 1.5vw, 0.8rem); font-weight: 700; opacity: 0.7; }
+
+        /* Before/After Slider */
+        .ba-container {
+            position: relative; width: 100%; max-width: 900px; margin: 0 auto;
+            overflow: hidden; border-radius: 5px;
+        }
+        .before-after-grid {
+            display: flex; gap: 1rem; height: clamp(300px, 70vw, 500px);
+        }
+        .ba-item {
+            flex: 1; position: relative; overflow: hidden; border-radius: 5px;
+        }
+        .ba-item img {
+            width: 100%; height: 100%;
+        }
+        .ba-item p {
+            position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.7);
+            color: white; padding: 0.5rem 1rem; font-weight: bold; margin: 0; border-radius: 3px;
+        }
+
+        /* Floating WhatsApp */
+        .whatsapp-float {
+            position: fixed; bottom: 2rem; right: 2rem; background: #25D366; color: white;
+            width: 56px; height: 56px; border-radius: 50%; display: flex; justify-content: center;
+            align-items: center; box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 999;
+            text-decoration: none; transition: var(--transition);
+        }
+        .whatsapp-float:hover { transform: scale(1.1) rotate(10deg); }
+
+        /* Sticky CTA Mobile */
+        .sticky-cta {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: var(--warm-white);
+            padding: 1rem; display: none; justify-content: center; z-index: 998;
+            border-top: 1px solid var(--soft-gold); box-shadow: 0 -5px 15px rgba(0,0,0,0.05);
+        }
+        .sticky-cta .btn { width: 100%; }
+
+        /* Mobile Menu Styles */
+        @media (max-width: 768px) {
+
+    header {
+        padding: 1rem;
+    }
+
+    .menu-toggle {
+        display: block;
+        font-size: 1.5rem;
+        color: var(--luxe-black);
+    }
+
+    nav {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background: white;
+        padding: 1rem;
+        display: none;
+        flex-direction: column;
+        gap: 1rem;
+        z-index: 999;
+    }
+
+    nav.active {
+        display: flex;
+    }
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        padding: 100px 1rem 3rem;
+        gap: 2rem;
+    }
+
+    .hero-content {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .hero h1 {
+        font-size: 2.5rem;
+        line-height: 1.1;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    .hero-visual {
+        width: 100%;
+        height: auto;
+        min-height: auto;
+    }
+
+    .main-img {
+        width: 100%;
+        height: auto;
+        max-height: 500px;
+        object-fit: cover;
+        border-radius: 200px 200px 0 0;
+    }
+
+    .floating-card {
+        display: none;
+    }
+
+    #hero-btns {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    #hero-btns .btn {
+        width: 100%;
+    }
+
+    .badges {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .product-card {
+        width: 100%;
+    }
+
+    .product-image {
+        height: auto;
+        aspect-ratio: 1/1.2;
+    }
+
+    .before-after-grid {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .ba-item {
+        min-height: 300px;
+    }
+
+    .ba-item img {
+        object-fit: cover;
+    }
+
+    footer div[style*="display: flex"] {
+        flex-direction: column;
+        gap: 1rem !important;
+    }
+
+    footer input,
+    footer button {
+        width: 100%;
+    }
+
+    .sticky-cta {
+        display: flex;
+    }
+
+    .whatsapp-float {
+        bottom: 5rem;
+        right: 1rem;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Mabel</div>
+        <button class="menu-toggle" id="menuToggle">☰</button>
+        <nav id="mobileNav">
+            <a href="#shop" class="btn btn-gold" style="padding: 0.8rem 1.5rem;">Shop Now</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 id="hero-title">Glow With <br><i>Confidence</i></h1>
+            <p id="hero-para">Premium skincare solutions curated from the US, Thailand, and Asia. Designed for radiant, healthy-looking skin that feels as good as it looks.</p>
+            <div style="display: flex; gap: 1rem;" id="hero-btns">
+                <a href="#shop" class="btn btn-gold">Explore Collection</a>
+               <a href="#routine-form" class="btn" style="border: 1px solid var(--luxe-black)">Get Routine</a>
+            </div>
+            <div class="badges" id="hero-badges">
+                <div class="badge-item"><span>✦</span> AUTHENTIC IMPORTS</div>
+                <div class="badge-item"><span>✦</span> 10K+ HAPPY SKIN</div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <img src="asset/img/img4.jpeg" alt="Model" class="main-img">
+            <div class="floating-card" style="top: 10%; right: 10%;">
+                <medium>Bestseller</medium>
+                <p><strong>Glow Serum</strong></p>
+                <span style="color: var(--soft-gold)">★★★★★</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="shop">
+        <div class="section-title">
+            <p style="text-transform: uppercase; letter-spacing: 3px; font-size: 0.7rem; margin-bottom: 1rem;">The Edit</p>
+            <h2>Best Selling Rituals</h2>
+        </div>
+        <div class="product-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="asset/img/img1.jpeg" alt="Product">
+                </div>
+                <h3>Radiance Cleansing Balm</h3>
+                <p style="color: var(--soft-gold); margin-bottom: 1rem;">₦25,000</p>
+               <a href="https://wa.me/2349017430885?text=Hello%20I%20want%20to%20buy%20Radiance%20Cleansing%20Balm" 
+   class="btn btn-gold" 
+   style="width: 100%; text-align: center;">
+   Buy Now
+</a>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="asset/img/img2.jpeg" alt="Product">
+                </div>
+                <h3>Vitamin C Brightener</h3>
+                <p style="color: var(--soft-gold); margin-bottom: 1rem;">₦32,000</p>
+                <a href="https://wa.me/2349017430885?text=Hello%20I%20want%20to%20buy%20Vitamin%20C%20Brightener" 
+                   class="btn btn-gold" 
+                   style="width: 100%; text-align: center;">
+                    Buy Now
+                </a>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="asset/img/img3.jpeg" alt="Product">
+                </div>
+                <h3>Silk Barrier Cream</h3>
+                <p style="color: var(--soft-gold); margin-bottom: 1rem;">₦28,500</p>
+                <a href="https://wa.me/2349017430885?text=Hello%20I%20want%20to%20buy%20Silk%20Barrier%20Cream" 
+                   class="btn btn-gold" 
+                   style="width: 100%; text-align: center;">
+                    Buy Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background: var(--soft-pink);">
+        <div class="section-title">
+            <h2>The Transformation</h2>
+            <p>Real results from the Mabel community</p>
+        </div>
+        <div class="ba-container">
+            <div class="before-after-grid">
+                <div class="ba-item">
+                    <img src="asset/img/img11.png" alt="Before">
+                    <p>Before</p>
+                </div>
+                <div class="ba-item">
+                    <img src="asset/img/img10.png" alt="After">
+                    <p>After</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="routine-form" style="background: white;">
+    <div class="section-title">
+        <p style="text-transform: uppercase; letter-spacing: 3px; font-size: 0.7rem; margin-bottom: 1rem;">
+            Personalized Care
+        </p>
+        <h2>Get Your Skincare Routine</h2>
+        <p>Fill in your details and we’ll recommend the best products for your skin.</p>
+    </div>
+
+    <div style="max-width: 700px; margin: 0 auto;">
+        <form id="routineForm" style="display: flex; flex-direction: column; gap: 1rem;">
+
+            <input 
+                type="text" 
+                id="name"
+                placeholder="Full Name"
+                required
+                style="padding: 1rem; border: 1px solid #ddd; font-size: 1rem; width: 100%;"
+            >
+
+            <input 
+                type="tel"
+                id="phone"
+                placeholder="WhatsApp Number"
+                required
+                style="padding: 1rem; border: 1px solid #ddd; font-size: 1rem; width: 100%;"
+            >
+
+            <select 
+                id="skin"
+                required
+                style="padding: 1rem; border: 1px solid #ddd; font-size: 1rem; width: 100%; background: white;"
+            >
+                <option value="">Select Skin Type</option>
+                <option>Oily Skin</option>
+                <option>Dry Skin</option>
+                <option>Combination Skin</option>
+                <option>Sensitive Skin</option>
+                <option>Acne-Prone Skin</option>
+            </select>
+
+            <textarea 
+                id="concern"
+                placeholder="Tell us your skin concerns..."
+                rows="5"
+                style="padding: 1rem; border: 1px solid #ddd; font-size: 1rem; width: 100%; resize: none;"
+            ></textarea>
+
+            <button type="submit" class="btn btn-gold" style="width: 100%;">
+                Get My Routine
+            </button>
+
+        </form>
+    </div>
+</section>
+
+    <footer class="section" style="background: var(--luxe-black); color: white; text-align: center;">
+        <h2 style="font-size: 3rem; margin-bottom: 2rem;">Mabel Cosmetics</h2>
+        <p style="max-width: 600px; margin: 0 auto 3rem; opacity: 0.7;">Subscribe to our newsletter for exclusive skincare tips and early access to new imports.</p>
+        <div style="display: flex; gap: 0; justify-content: center; margin-bottom: 4rem; flex-wrap: wrap; max-width: 100%;">
+            <input type="email" placeholder="Email Address" style="padding: 1rem; border: none; flex: 1; min-width: 200px; font-size: 1rem;">
+            <button class="btn btn-gold" style="flex-shrink: 0;">Join</button>
+        </div>
+        <div style="font-size: 0.8rem; opacity: 0.5;">
+            &copy; 2024 MABEL COSMETICS. ALL RIGHTS RESERVED.
+        </div>
+    </footer>
+
+    <a href="https://wa.me/yournumber" class="whatsapp-float">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+    </a>
+
+    <div class="sticky-cta">
+        <a href="#shop" class="btn btn-gold" style="width: 100%; text-align: center;">Shop Best Sellers</a>
+    </div>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileNav = document.getElementById('mobileNav');
+        
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                mobileNav.classList.toggle('active');
+            });
+            
+            // Close menu when a link is clicked
+            mobileNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileNav.classList.remove('active');
+                });
+            });
+        }
+
+        // Hero Animations
+        window.onload = () => {
+            const tl = gsap.timeline();
+            tl.to("#hero-title", { opacity: 1, y: 0, duration: 1, ease: "power4.out" })
+              .to("#hero-para", { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.6")
+              .to("#hero-btns", { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=0.6")
+              .to("#hero-badges", { opacity: 1, duration: 1 }, "-=0.2")
+              .from(".main-img", { scale: 1.2, duration: 2, ease: "power2.out" }, 0);
+        };
+
+        // Scroll Animations for sections
+        gsap.utils.toArray(".product-card").forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 85%",
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                delay: i * 0.1,
+                ease: "power2.out"
+            });
+        });
+
+        // Add to Bag Animation
+        document.querySelectorAll('.product-card .btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const originalText = this.innerHTML;
+                this.innerHTML = "Added to Bag ✓";
+                this.style.background = "#25D366";
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.background = "var(--luxe-black)";
+                }, 2000);
+            });
+        });
+
+
+        function buyNow(productName) {
+    const phone = "2349017430885";
+
+    const message = `Hello Mabel Cosmetics 🌸
+
+I want to order:
+🛍 Product: ${productName}
+
+Please let me know the price, availability, and how to pay.`;
+
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+    window.open(url, "_blank");
+}
+
+
+    </script>
+</body>
+</html>
